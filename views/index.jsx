@@ -24,5 +24,4 @@ function Index ({breads, title}) {
     )
 }
 
-
 module.exports = Index
