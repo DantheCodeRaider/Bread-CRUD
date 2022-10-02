@@ -1,7 +1,7 @@
 const React = require('react')
 const Default = require('./layouts/Default')
 
-function fourofour () {
+function error404 () {
     // Confirm we are getting our bread data in the terminal.
     // console.log(bread.name)
       return (
@@ -11,4 +11,4 @@ function fourofour () {
       )
   }
   
-module.exports = fourofour
+module.exports = error404
