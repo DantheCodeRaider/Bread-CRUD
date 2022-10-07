@@ -4,17 +4,33 @@ const Bread = require('../models/bread.js')
 
 // INDEX
 breads.get('/', (req, res) => {
-  res.render('Index',
-    {
-      breads: Bread,
-      title: 'Index Page'
-    }
-  )
-})
+  Bread.find()
+      .then(foundBreads => {
+          res.render('Index', {
+              breads: foundBreads,
+              title: 'Index Page'
+          })
+      })
+}) 
+
 
 // NEW
 breads.get('/new', (req, res) => {
   res.render('new')
+})
+
+// SHOW
+breads.get('/:id', (req, res) => {
+  Bread.findById(req.params.id)
+    .then(foundBread => {
+    console.log('Found bread ', foundBread)
+      res.render('Show', {
+        bread: foundBread
+      })
+    })
+    .catch(err => {
+      res.send('error404')
+    })
 })
 
 // EDIT
@@ -24,19 +40,6 @@ breads.get('/:indexArray/edit', (req, res) => {
     index: req.params.indexArray
   })
 })
-
-// SHOW
-breads.get('/:arrayIndex', (req, res) => {
-  if (Bread[req.params.arrayIndex]) {
-    res.render('Show', {
-      bread:Bread[req.params.arrayIndex],
-      index: req.params.arrayIndex,
-    })
-  } else {
-    res.render('error404')
-  }
-})
-
 
 // CREATE
 breads.post('/', (req, res) => {
@@ -48,7 +51,8 @@ breads.post('/', (req, res) => {
   } else {
     req.body.hasGluten = false
   }
-  Bread.push(req.body)
+  //Bread.push(req.body)
+  Bread.create(req.body)
   res.redirect('/breads')
 })
 
@@ -63,7 +67,6 @@ breads.put('/:arrayIndex', (req, res) => {
   res.redirect(`/breads/${req.params.arrayIndex}`)
 })
 
-
 // DELETE
 breads.delete('/:indexArray', (req, res) => {
   Bread.splice(req.params.indexArray, 1)
@@ -72,3 +75,12 @@ breads.delete('/:indexArray', (req, res) => {
 
 module.exports = breads
 
+/* breads.get('/', (req, res) => {
+  Bread.find()
+      .then(foundBreads => {
+          res.render('Index', {
+              breads: foundBreads,
+              title: 'Index Page'
+          })
+      })
+}) */
