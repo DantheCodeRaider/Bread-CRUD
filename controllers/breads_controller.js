@@ -23,15 +23,14 @@ breads.get('/new', (req, res) => {
 // SHOW
 breads.get('/:id', (req, res) => {
   Bread.findById(req.params.id)
-    .then(foundBread => {
-      res.render('Show', {
-        bread: foundBread
-      })
-    })
-    .catch(err => {
-      res.send('error404')
+      .then(foundBread => {
+        const bakedBy = foundBread.getBakedBy()
+        res.render('Show', {
+            bread: foundBread
+        })
     })
 })
+
 
 // EDIT
 breads.get('/:id/Edit', (req, res) => {
@@ -88,6 +87,9 @@ breads.get('/data/seed', (req, res) => {
   Bread.insertMany(oldBread)
     .then(createdBreads => {
       res.redirect('/breads')
+    })    
+    .catch(err => {
+      res.send('error404')
     })
 })
 
