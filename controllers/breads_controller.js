@@ -1,6 +1,7 @@
 const express = require('express')
 const breads = express.Router()
 const Bread = require('../models/bread.js')
+const oldBread = require('../models/oldBread.js')
 
 // INDEX
 breads.get('/', (req, res) => {
@@ -23,7 +24,6 @@ breads.get('/new', (req, res) => {
 breads.get('/:id', (req, res) => {
   Bread.findById(req.params.id)
     .then(foundBread => {
-    console.log('Found bread ', foundBread)
       res.render('Show', {
         bread: foundBread
       })
@@ -34,11 +34,16 @@ breads.get('/:id', (req, res) => {
 })
 
 // EDIT
-breads.get('/:indexArray/edit', (req, res) => {
-  res.render('Edit', {
-    bread: Bread[req.params.indexArray],
-    index: req.params.indexArray
-  })
+breads.get('/:id/Edit', (req, res) => {
+  Bread.findById(req.params.id)
+    .then(foundBread => {
+      res.render('Edit', {
+        bread: foundBread
+      })
+    })
+    .catch(err => {
+      res.send('error404')
+    })
 })
 
 // CREATE
@@ -57,30 +62,33 @@ breads.post('/', (req, res) => {
 })
 
 // UPDATE
-breads.put('/:arrayIndex', (req, res) => {
+breads.put('/:id', (req, res) => {
   if(req.body.hasGluten === 'on'){
     req.body.hasGluten = true
   } else {
     req.body.hasGluten = false
   }
-  Bread[req.params.arrayIndex] = req.body
-  res.redirect(`/breads/${req.params.arrayIndex}`)
+  Bread.findByIdAndUpdate(req.params.id, req.body, { new: true }) 
+    .then(updatedBread => {
+      //console.log(updatedBread) 
+      res.redirect(`/breads/${req.params.id}`) 
+    })
 })
 
 // DELETE
-breads.delete('/:indexArray', (req, res) => {
-  Bread.splice(req.params.indexArray, 1)
-  res.status(303).redirect('/breads')
+breads.delete('/:id', (req, res) => {
+  Bread.findByIdAndDelete(req.params.id) 
+    .then(deletedBread => { 
+      res.status(303).redirect('/breads')
+    })
+})
+
+//SEED ROUTE
+breads.get('/data/seed', (req, res) => {
+  Bread.insertMany(oldBread)
+    .then(createdBreads => {
+      res.redirect('/breads')
+    })
 })
 
 module.exports = breads
-
-/* breads.get('/', (req, res) => {
-  Bread.find()
-      .then(foundBreads => {
-          res.render('Index', {
-              breads: foundBreads,
-              title: 'Index Page'
-          })
-      })
-}) */
