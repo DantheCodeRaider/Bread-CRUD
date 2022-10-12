@@ -9,7 +9,6 @@ function error404 () {
         <h2><a href="/">404 Page</a></h2>
         </Default>
       )
-      
   }
   
 module.exports = error404
