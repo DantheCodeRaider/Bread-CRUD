@@ -3,6 +3,14 @@ body {
     text-align: center;
   }
   
+  h1 {
+    text-align: center;
+  }
+
+  .container {
+    text-align: center;
+  }
+
   img {
     width: 50%;
     display: block;
@@ -11,4 +19,8 @@ body {
   
   ul {
     text-align: left;
+  }
+
+  #bakersul {
+    text-align: center;
   }
