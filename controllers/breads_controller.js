@@ -8,21 +8,15 @@ const { populate } = require('../models/bread.js')
 
 
 // Index:
-breads.get('/', (req, res) => {
-  Baker.find()
-    .then(foundBakers => {
-      Bread.find()
-      .populate('baker')
-      .then(foundBreads => {
-          res.render('Index', {
-              breads: foundBreads,
-              bakers: foundBakers,
-              title: 'Index Page'
-          })
-      })
-    })
+breads.get('/', async (req, res) => {
+  const foundBakers = await Baker.find()
+  const foundBreads = await Bread.find().limit(10).populate('baker')
+  res.render('Index', {
+    breads: foundBreads,
+    bakers: foundBakers,
+    title: 'Index Page'
+  })
 })
-
 
 // NEW
 breads.get('/new', (req, res) => {
