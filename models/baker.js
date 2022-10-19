@@ -1,7 +1,7 @@
 // dependencies
 const mongoose = require('mongoose')
 const { Schema } = mongoose
-const Bread = require('./bread')
+const Bread = require('./bread.js')
 
 // schema
 const bakerSchema = new Schema({
@@ -34,5 +34,5 @@ bakerSchema.post('findOneAndDelete', function() {
           
 
 // model and export
-const Baker = mongoose.model('Baker', bakerSchema)
+const Baker = mongoose.model('baker', bakerSchema)
 module.exports = Baker

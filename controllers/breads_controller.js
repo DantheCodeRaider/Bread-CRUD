@@ -11,7 +11,7 @@ const { populate } = require('../models/bread.js')
 breads.get('/', async (req, res) => {
   const foundBakers = await Baker.find()
   const foundBreads = await Bread.find().limit(10).populate('baker')
-  res.render('Index', {
+  res.render('index', {
     breads: foundBreads,
     bakers: foundBakers,
     title: 'Index Page'
@@ -49,7 +49,7 @@ breads.get('/:id/edit', (req, res) => {
     .then(foundBakers => {
         Bread.findById(req.params.id)
           .then(foundBread => {
-            res.render('Edit', {
+            res.render('edit', {
                 bread: foundBread, 
                 bakers: foundBakers 
             })
